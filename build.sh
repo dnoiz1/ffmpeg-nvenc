@@ -173,16 +173,19 @@ BuildVpx() {
 BuildFFmpeg() {
     echo "Compiling ffmpeg"
     cd $source_dir
-    ffmpeg_version="3.1"
+    ffmpeg_version="snapshot-git"
     if [ ! -f  ffmpeg-${ffmpeg_version}.tar.bz2 ]; then
         wget -4 http://ffmpeg.org/releases/ffmpeg-${ffmpeg_version}.tar.bz2
     fi
     tar xjf ffmpeg-${ffmpeg_version}.tar.bz2
-    cd ffmpeg-${ffmpeg_version}
+    cd ffmpeg
+
+    patch -p1 < ../../patches/fix_building_with_libfdk-aac_v2.patch
+
     PKG_CONFIG_PATH="${build_dir}/lib/pkgconfig" ./configure \
         --prefix="$build_dir" \
-        --extra-cflags="-fPIC -m64 -I${inc_dir}" \
-        --extra-ldflags="-L${build_dir}/lib" \
+        --extra-cflags="-fPIC -m64 -I${inc_dir} -I/usr/local/include" \
+        --extra-ldflags="-L${build_dir}/lib -L/usr/local/lib" \
         --bindir="$bin_dir" \
         --enable-gpl \
         --enable-libass \
@@ -197,7 +200,7 @@ BuildFFmpeg() {
         --enable-nonfree \
         --enable-nvenc \
         --enable-pic \
-        --enable-x11grab \
+        --enable-libxcb \
         --extra-ldexeflags=-pie \
         --enable-shared
     make -j${cpus}
