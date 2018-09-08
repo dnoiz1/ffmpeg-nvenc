@@ -32,3 +32,9 @@ The following command line options are available:
 If you find this script useful, you can consider
 supporting [Linux GameCast](https://www.patreon.com/linuxgamecast)
 and [Lutris](https://www.patreon.com/lutris).
+
+# Patches applied
+
+* https://github.com/libav/libav/commit/141c960e21d2860e354f9b90df136184dd00a9a8.patch
+
+*This is very likely to break future versions!* 
